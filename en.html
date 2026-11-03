@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roberto Berrettino</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Roberto Berrettino: Technical Lead Business Applications, Dynamics 365 Business Central, project management and AI engineering. Milan, Italy.">
+<meta property="og:title" content="Roberto Berrettino">
+<meta property="og:description" content="Dynamics 365 Business Central, project management and AI engineering. Working on Dynamics NAV and Business Central since 2008.">
+<link rel="alternate" hreflang="it" href="index.html">
+<link rel="alternate" hreflang="en" href="en.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<!-- scaricati subito, in parallelo, invece che uno dopo l'altro -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="modulepreload" href="assets/js/scene.js">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js">
+</head>
+<body>
+
+<!-- Versione inglese di index.html: stessa struttura, stessi data-key -->
+
+<!-- Scena 3D a tutto schermo, dietro ai contenuti -->
+<canvas id="scene" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+<!-- Chip raccolti dalle schede: si radunano attorno all'anello -->
+<nav class="orbit" id="orbit" aria-label="Links to the sections"></nav>
+
+<!-- Schermata di caricamento -->
+<div class="loader" id="loader" aria-hidden="true">
+  <span class="mark mark--big">RB</span>
+  <span class="loader__text">Loading <b id="loaderPct">0</b>%</span>
+</div>
+
+<!-- Barra in alto -->
+<header class="topbar">
+  <a class="brand" href="#intro" aria-label="Back to the top">
+    <span class="mark">RB</span>
+    <span class="brand__name">Roberto Berrettino</span>
+  </a>
+  <nav class="topnav" aria-label="Sections">
+    <a href="#about" class="pill">About</a>
+    <a href="#chapter-1" class="pill">Career</a>
+    <a href="#skills" class="pill">Skills</a>
+    <a href="#certifications" class="pill">Certifications</a>
+    <a href="#contact" class="pill">Contact</a>
+  </nav>
+  <a class="pill pill--lang" href="index.html" hreflang="it" lang="it" aria-label="Versione italiana">IT</a>
+</header>
+
+<!-- Indicatore laterale: una tacca per sezione -->
+<nav class="rail" id="rail" aria-label="Progress"></nav>
+
+
+<main id="content">
+
+  <!-- 0 · Intro -->
+  <section class="hero" id="intro" data-key="0" data-label="Intro">
+    <div class="hero__inner">
+      <p class="hero__place">Milan, Italy</p>
+      <h1 class="hero__name" data-scramble>Roberto<br>Berrettino</h1>
+      <p class="hero__role">Technical Lead Business Applications at Lodestar. Dynamics&nbsp;365 Business Central, project management and AI&nbsp;engineering.</p>
+      <ul class="hero__facts">
+        <li><b>2008</b> my first Dynamics NAV project</li>
+        <li><b>4</b> companies, from developer to consultant and technical lead</li>
+        <li><b>10</b> certifications, 7 in artificial intelligence</li>
+      </ul>
+    </div>
+    <a class="scrollhint" href="#chapter-1" id="scrollHint">
+      <span>Scroll to travel through my career</span>
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    </a>
+  </section>
+
+  <!-- 1 · About -->
+  <section class="block" id="about" data-key="1" data-label="About">
+    <div class="sheet sheet--about">
+      <h2 class="sheet__title" data-scramble>About me</h2>
+      <div class="about">
+        <div class="about__item">
+          <h3>Products on AppSource</h3>
+          <p>Technical Lead for Lodestar’s Business Central solutions on Microsoft AppSource, responsible for technical design, product evolution, and the overall coherence of the integrated application ecosystem.</p>
+        </div>
+        <div class="about__item">
+          <h3>AI in Business Central</h3>
+          <p>I bring artificial intelligence into Business Central: I design agents with Azure AI Foundry and Microsoft Copilot Studio, and the integrations that connect them to ERP data and processes. I start from concrete use cases and take solutions from prototype to production, following MLOps and responsible AI practices.</p>
+        </div>
+        <div class="about__item">
+          <h3>Logistics and operations</h3>
+          <p>I bring solid experience in logistics and operations, supporting complex process flows, optimizing end‑to‑end operations, and designing practical, well‑structured solutions that enhance day‑to‑day execution.</p>
+        </div>
+      </div>
+      <p class="carry"><span class="carry__chip" data-carry>About</span></p>
+    </div>
+  </section>
+
+  <!-- 2 · SagiCofim -->
+  <section class="chapter chapter--right" id="chapter-1" data-key="2" data-label="2008">
+    <article class="panel">
+      <p class="panel__meta"><span>May 2008 – Oct 2014</span><span>Cernusco sul Naviglio</span></p>
+      <h2 class="panel__title" data-scramble>The foundations</h2>
+      <p class="panel__org">SagiCofim S.p.A.</p>
+      <p class="panel__body">Six and a half years as ICT Specialist and Dynamics NAV developer in a company’s IT department. The technical foundations of ERP, seen from the side of those who use it every day.</p>
+      <ol class="roles">
+        <li><span class="roles__title">ICT Specialist | Dynamics NAV Developer</span><span class="roles__when">May 2008 – Oct 2014</span></li>
+      </ol>
+      <p class="carry"><span class="carry__label">Skill gained</span><span class="carry__chip" data-carry>Dynamics NAV/BC development</span></p>
+      <p class="panel__count"><b>01</b><span>/ 04</span></p>
+    </article>
+  </section>
+
+  <!-- 3 · Cegeka -->
+  <section class="chapter chapter--left" id="chapter-2" data-key="3" data-label="2014">
+    <article class="panel">
+      <p class="panel__meta"><span>Nov 2014 – Oct 2019</span><span>Cologno Monzese</span></p>
+      <h2 class="panel__title" data-scramble>From code to consulting</h2>
+      <p class="panel__org">Cegeka Italia</p>
+      <p class="panel__body">Five years at Cegeka: from Dynamics NAV developer to senior developer, then operations consultant on client projects.</p>
+      <ol class="roles">
+        <li><span class="roles__title">Dynamics NAV Operations Consultant</span><span class="roles__when">Jan 2016 – Oct 2019</span></li>
+        <li><span class="roles__title">Dynamics NAV Senior Developer</span><span class="roles__when">Mar 2015 – Dec 2015</span></li>
+        <li><span class="roles__title">Dynamics NAV Developer</span><span class="roles__when">Nov 2014 – Feb 2015</span></li>
+      </ol>
+      <p class="panel__skills">Functional design for operations, teamwork</p>
+      <p class="carry"><span class="carry__label">Skill gained</span><span class="carry__chip" data-carry>Operations functional design</span></p>
+      <p class="panel__count"><b>02</b><span>/ 04</span></p>
+    </article>
+  </section>
+
+  <!-- 4 · Microsys -->
+  <section class="chapter chapter--right" id="chapter-3" data-key="4" data-label="2019">
+    <article class="panel">
+      <p class="panel__meta"><span>Sep 2019 – Dec 2024</span><span>Milan</span></p>
+      <h2 class="panel__title" data-scramble>Leading teams and projects</h2>
+      <p class="panel__org">Microsys</p>
+      <p class="panel__body">The move to Dynamics 365 Business Central and into leadership: technical team, senior consulting and project management.</p>
+      <ol class="roles">
+        <li><span class="roles__title">Dynamics 365 BC Project Manager</span><span class="roles__when">from Dec 2020</span></li>
+        <li><span class="roles__title">Dynamics 365 BC Senior Operations Consultant</span><span class="roles__when">from Oct 2019</span></li>
+        <li><span class="roles__title">Dynamics 365 BC Technical Team Manager</span><span class="roles__when">from Sep 2019</span></li>
+      </ol>
+      <p class="panel__skills">Functional design for operations, teamwork</p>
+      <p class="carry"><span class="carry__label">Skill gained</span><span class="carry__chip" data-carry>Project management</span></p>
+      <p class="panel__count"><b>03</b><span>/ 04</span></p>
+    </article>
+  </section>
+
+  <!-- 5 · Lodestar -->
+  <section class="chapter chapter--left" id="chapter-4" data-key="5" data-label="2025">
+    <article class="panel">
+      <p class="panel__meta"><span>Jan 2025 – present</span><span>Milan, hybrid</span></p>
+      <h2 class="panel__title" data-scramble>Business Central meets AI</h2>
+      <p class="panel__org">Lodestar S.p.A.</p>
+      <p class="panel__body">Technical Lead for Business Applications, senior consultant and project manager on Business Central. Alongside that, work as an AI Engineer, with seven Microsoft certifications in artificial intelligence in 2026.</p>
+      <ol class="roles">
+        <li><span class="roles__title">Technical Lead – Business Applications</span><span class="roles__when">Jan 2025 – present</span></li>
+        <li><span class="roles__title">Dynamics 365 BC Senior Operations Consultant – Project Manager</span><span class="roles__when">Jan 2025 – present</span></li>
+      </ol>
+      <p class="panel__skills">Solution architecture, Microsoft Dynamics 365 Business Central</p>
+      <p class="carry"><span class="carry__label">Skill gained</span><span class="carry__chip" data-carry>Solution architecture</span></p>
+      <p class="panel__count"><b>04</b><span>/ 04</span></p>
+    </article>
+  </section>
+
+  <!-- 6 · Skills -->
+  <section class="block block--skills" id="skills" data-key="6" data-label="Skills">
+    <div class="sheet sheet--skills">
+      <h2 class="sheet__title" data-scramble>Skills</h2>
+      <div class="skills">
+        <div class="skills__group">
+          <h3>Business Central</h3>
+          <ul>
+            <li>Dynamics 365 Business Central and Dynamics NAV</li>
+            <li>Solution architecture</li>
+            <li>Functional design for operations</li>
+            <li>Software development</li>
+          </ul>
+        </div>
+        <div class="skills__group">
+          <h3>Management</h3>
+          <ul>
+            <li>Project management</li>
+            <li>Leading technical teams</li>
+            <li>Consulting</li>
+            <li>Change management</li>
+            <li>Teamwork</li>
+          </ul>
+        </div>
+        <div class="skills__group">
+          <h3>Artificial intelligence</h3>
+          <ul>
+            <li>AI agents with Azure AI Foundry</li>
+            <li>AI agents and integrations in Business Central</li>
+            <li>Multimodal integrations</li>
+            <li>MLOps and responsible AI</li>
+          </ul>
+        </div>
+      </div>
+      <p class="carry"><span class="carry__chip" data-carry>Skills</span></p>
+    </div>
+  </section>
+
+  <!-- 7 · Certifications -->
+  <section class="block" id="certifications" data-key="7" data-label="Certifications">
+    <div class="sheet">
+      <div class="sheet__head">
+        <h2 class="sheet__title" data-scramble>Certifications</h2>
+        <p class="sheet__intro">Ten certifications, most recent first.</p>
+        <p class="carry"><span class="carry__chip" data-carry>Certifications</span></p>
+      </div>
+      <div class="ledger" role="table" aria-label="Certifications">
+        <div class="ledger__row ledger__row--head" role="row">
+          <span role="columnheader">Issued</span>
+          <span role="columnheader">Certification</span>
+          <span role="columnheader">Area</span>
+        </div>
+        <div class="ledger__row" role="row"><span role="cell">Aug 2026</span><span role="cell"><b>Microsoft Certified: AI Transformation Leader</b><small>Microsoft</small></span><span role="cell" class="tag tag--ai">AI</span></div>
+        <div class="ledger__row" role="row"><span role="cell">Jun 2026</span><span role="cell"><b>AI agent fundamentals with Azure AI Foundry</b><small>Microsoft</small></span><span role="cell" class="tag tag--ai">AI</span></div>
+        <div class="ledger__row" role="row"><span role="cell">May 2026</span><span role="cell"><b>MLOps and responsible AI practices</b><small>Microsoft</small></span><span role="cell" class="tag tag--ai">AI</span></div>
+        <div class="ledger__row" role="row"><span role="cell">May 2026</span><span role="cell"><b>Microsoft Generative AI Engineering Professional Certificate</b><small>Microsoft</small></span><span role="cell" class="tag tag--ai">AI</span></div>
+        <div class="ledger__row" role="row"><span role="cell">Apr 2026</span><span role="cell"><b>Core generative models and techniques</b><small>Microsoft</small></span><span role="cell" class="tag tag--ai">AI</span></div>
+        <div class="ledger__row" role="row"><span role="cell">Apr 2026</span><span role="cell"><b>Working with large language models using Azure</b><small>Microsoft</small></span><span role="cell" class="tag tag--ai">AI</span></div>
+        <div class="ledger__row" role="row"><span role="cell">Apr 2026</span><span role="cell"><b>Multimodal and cross-modal AI integrations</b><small>Microsoft</small></span><span role="cell" class="tag tag--ai">AI</span></div>
+        <div class="ledger__row" role="row"><span role="cell">Dec 2024</span><span role="cell"><b>Microsoft Certified: Dynamics 365 Business Central Developer Associate</b><small>Microsoft</small></span><span role="cell" class="tag">Business Central</span></div>
+        <div class="ledger__row" role="row"><span role="cell">Apr 2021</span><span role="cell"><b>Microsoft Certified: Dynamics 365 Business Central Functional Consultant Associate</b><small>Microsoft</small></span><span role="cell" class="tag">Business Central</span></div>
+        <div class="ledger__row" role="row"><span role="cell">May 2019</span><span role="cell"><b>PRINCE2® Foundation Certificate in Project Management</b><small>AXELOS Global Best Practice</small></span><span role="cell" class="tag">Project management</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · Contact -->
+  <section class="contact" id="contact" data-key="8" data-label="Contact">
+    <div class="contact__inner">
+      <h2 class="sr-only">Contact</h2>
+      <a class="neonlink" id="linkedinLink" href="https://www.linkedin.com/in/roberto-berrettino-8a164790/" target="_blank" rel="noopener" aria-label="Roberto Berrettino’s LinkedIn profile (opens in a new tab)">
+        <svg class="neonlink__logo" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+        <span class="neonlink__text">LinkedIn</span>
+        <svg class="neonlink__arrow" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+      </a>
+      <nav class="contact__skills" id="skillList" aria-label="Links to the sections"></nav>
+    </div>
+  </section>
+
+</main>
+
+<script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
