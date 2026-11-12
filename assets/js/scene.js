@@ -267,7 +267,8 @@ function glowTexture() {
   return t;
 }
 
-export function createScene(canvas, { mobile = false, reducedMotion = false, onFirstFrame } = {}) {
+// onFrame(now): chiamata a ogni fotogramma dopo il disegno, con la telecamera già aggiornata
+export function createScene(canvas, { mobile = false, reducedMotion = false, onFirstFrame, onFrame } = {}) {
   const rand = mulberry32(20080501);
 
   // misure della tela, non della finestra: la tela è alta quanto il viewport grande,
@@ -350,7 +351,8 @@ export function createScene(canvas, { mobile = false, reducedMotion = false, onF
   const q4 = new THREE.Quaternion();
   const eul = new THREE.Euler();
   for (let i = 0; i < tCount; i++) {
-    const [x, z, w, d, h, s] = towers.slice(i * 6, i * 6 + 6);
+    const o = i * 6;
+    const x = towers[o], z = towers[o + 1], w = towers[o + 2], d = towers[o + 3], h = towers[o + 4], s = towers[o + 5];
     m4.compose(v3.set(x, h / 2, z), q4.identity(), s3.set(w, h, d));
     towerMesh.setMatrixAt(i, m4);
     aScale.set([w, h, d], i * 3);
@@ -548,13 +550,15 @@ export function createScene(canvas, { mobile = false, reducedMotion = false, onF
     packetMesh.instanceMatrix.needsUpdate = true;
   }
 
-  function place(u, t) {
+  function place(u, t, dt = 0) {
     const k = clamp(u, 0, N) / N;
     posCurve.getPoint(k, camPos);
     lookCurve.getPoint(k, camLook);
     if (!reducedMotion) {
-      pointer.sx += (pointer.x - pointer.sx) * 0.04;
-      pointer.sy += (pointer.y - pointer.sy) * 0.04;
+      // legato al tempo, non ai fotogrammi: stessa risposta a 60 e a 144 Hz
+      const follow = 1 - Math.exp(-dt * 2.4);
+      pointer.sx += (pointer.x - pointer.sx) * follow;
+      pointer.sy += (pointer.y - pointer.sy) * follow;
       camPos.x += pointer.sx * 1.4 + Math.sin(t * 0.25) * 0.5;
       camPos.y += -pointer.sy * 0.8 + Math.sin(t * 0.33) * 0.3;
     }
@@ -583,9 +587,11 @@ export function createScene(canvas, { mobile = false, reducedMotion = false, onF
     sampled = 0;
     slowTime = 0;
     if (avg < 1 / 45) { sampled = null; return; }  // fluido: si smette di misurare
-    if (renderer.getPixelRatio() > 1) {
-      renderer.setPixelRatio(1);
-      composer.setPixelRatio(1);
+    const pr = renderer.getPixelRatio();
+    if (pr > 1) {
+      const next = pr > 1.25 ? 1.25 : 1;  // un gradino alla volta
+      renderer.setPixelRatio(next);
+      composer.setPixelRatio(next);
     } else {
       useBloom = false;
       sampled = null;
@@ -597,7 +603,8 @@ export function createScene(canvas, { mobile = false, reducedMotion = false, onF
     else renderer.render(scene, camera);
   }
 
-  function frame() {
+  function frame(now) {
+    requestAnimationFrame(frame);
     const dt = Math.min(clock.getDelta(), 0.05);
     adapt(dt);
     elapsed += dt;
@@ -608,11 +615,11 @@ export function createScene(canvas, { mobile = false, reducedMotion = false, onF
     const a = smooth(2, 8, cur);  // l'anello si accende man mano che arrivano le competenze
     updateRing(a, elapsed);
     updatePackets(elapsed, dt);
-    place(cur, elapsed);
+    place(cur, elapsed, dt);
 
     render();
     if (first) { first = false; onFirstFrame && onFirstFrame(); }
-    requestAnimationFrame(frame);
+    if (onFrame) onFrame(now);
   }
 
   function staticFrame() {

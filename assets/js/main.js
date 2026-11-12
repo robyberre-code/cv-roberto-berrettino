@@ -23,6 +23,7 @@ let scene = null;
 let anchors = [];
 let sceneReady = false;
 let loaderDone = false;
+let frameLoop = false;  // la scena gira: scroll e mirino si aggiornano nel suo ciclo
 
 // ---------- Loader ----------
 const loadStart = performance.now();
@@ -53,6 +54,8 @@ setTimeout(() => { sceneReady = true; }, mobile ? 3000 : 5000);
       mobile,
       reducedMotion: reduced,
       onFirstFrame: () => { sceneReady = true; },
+      // un solo ciclo: mirino e chip si disegnano con la telecamera dello stesso fotogramma
+      onFrame: (now) => { frameLoop = true; update(); orbitFrame(now); },
     });
     update();
     scene.snap();
@@ -144,10 +147,16 @@ fx.className = 'orbit__fx';
 fx.setAttribute('aria-hidden', 'true');
 orbit.appendChild(fx);
 const g = fx.getContext('2d');
+// Misure della tela (alta quanto il viewport grande, come la scena): si rialloca solo se
+// cambiano davvero, non quando compare o sparisce la barra degli indirizzi del telefono
+let fxW = 0, fxH = 0;
 function sizeFx() {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  fx.width = Math.round(window.innerWidth * dpr);
-  fx.height = Math.round(window.innerHeight * dpr);
+  const w = fx.clientWidth, h = fx.clientHeight;
+  if (!w || !h || (w === fxW && h === fxH)) return;
+  fxW = w; fxH = h;
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+  fx.width = Math.round(w * dpr);
+  fx.height = Math.round(h * dpr);
   g.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 sizeFx();
@@ -218,17 +227,23 @@ function drawHud(hud, alpha, count, now) {
   g.globalAlpha = alpha;
   const fill = count / carried.length;
   // linea dell'anello: si accende man mano che arrivano i chip
-  g.strokeStyle = `rgba(108, 194, 255, ${0.35 + 0.55 * fill})`;
-  g.lineWidth = 1.5;
-  if (!narrow.matches) { g.shadowColor = '#6cc2ff'; g.shadowBlur = 6 + 10 * fill; }
   g.beginPath();
   for (let i = 0; i <= 48; i++) {
     const [x, y] = hud.at((i / 48) * Math.PI * 2);
     i ? g.lineTo(x, y) : g.moveTo(x, y);
   }
   g.closePath();
+  // alone: due tratti larghi e trasparenti sotto la linea (costa molto meno di una sfocatura)
+  g.lineJoin = 'round';
+  g.strokeStyle = `rgba(108, 194, 255, ${0.06 + 0.08 * fill})`;
+  g.lineWidth = 9 + 6 * fill;
   g.stroke();
-  g.shadowBlur = 0;
+  g.strokeStyle = `rgba(108, 194, 255, ${0.1 + 0.12 * fill})`;
+  g.lineWidth = 4.5 + 2 * fill;
+  g.stroke();
+  g.strokeStyle = `rgba(108, 194, 255, ${0.35 + 0.55 * fill})`;
+  g.lineWidth = 1.5;
+  g.stroke();
   // tacche esterne che ruotano
   g.setLineDash([2, 9]);
   g.lineDashOffset = -now / 60;
@@ -262,14 +277,14 @@ function drawHud(hud, alpha, count, now) {
 }
 
 function orbitFrame(now) {
-  requestAnimationFrame(orbitFrame);
   const dt = Math.min(0.05, (now - last) / 1000);
   last = now;
   const on = !!scene && !reduced && anchors.length > 1;
   root.classList.toggle('has-orbit', on);
   if (!on) return;
+  if (!fxW) sizeFx();  // la tela si misura solo da visibile
   const W = window.innerWidth, H = window.innerHeight;
-  g.clearRect(0, 0, W, H);
+  g.clearRect(0, 0, fxW, fxH);
 
   const ring = scene.ringScreen();
   const { u } = progress();
@@ -387,13 +402,22 @@ function orbitFrame(now) {
       g.stroke();
       g.restore();
 
-      // scia luminosa dietro il chip (sul telefono senza sfocatura: costa troppo)
+      // scia luminosa dietro il chip: alone a tratto largo e trasparente, poi il nucleo
       const tail = Math.max(0, e - 0.28);
       g.save();
       g.lineCap = 'round';
-      g.shadowColor = '#6cc2ff';
-      g.shadowBlur = narrow.matches ? 0 : 16;
+      g.lineJoin = 'round';
       const steps = 14;
+      for (const [from, width, alpha] of [[0, 14, 0.07], [0.35, 20, 0.09]]) {
+        g.beginPath();
+        for (let i = Math.round(steps * from); i <= steps; i++) {
+          const [hx, hy] = arcPoint(c, ex, ey, tail + ((e - tail) * i) / steps);
+          i === Math.round(steps * from) ? g.moveTo(hx, hy) : g.lineTo(hx, hy);
+        }
+        g.strokeStyle = `rgba(108, 194, 255, ${alpha})`;
+        g.lineWidth = width;
+        g.stroke();
+      }
       for (let i = 0; i < steps; i++) {
         const a0 = tail + ((e - tail) * i) / steps, a1 = tail + ((e - tail) * (i + 1)) / steps;
         const [x0, y0] = arcPoint(c, ex, ey, a0);
@@ -447,7 +471,6 @@ function orbitFrame(now) {
   }
   g.restore();
 }
-requestAnimationFrame(orbitFrame);
 
 document.querySelectorAll('a[href^="#"]').forEach((a) => {
   a.addEventListener('click', (e) => {
@@ -480,7 +503,7 @@ function update() {
 
 let ticking = false;
 window.addEventListener('scroll', () => {
-  if (ticking) return;
+  if (ticking || frameLoop) return;  // con la scena attiva ci pensa il suo ciclo
   ticking = true;
   requestAnimationFrame(() => { ticking = false; update(); });
 }, { passive: true });
@@ -523,7 +546,9 @@ function scramble(el) {
 
 const io = new IntersectionObserver((entries) => {
   entries.forEach((e) => {
-    if (e.isIntersecting && !e.target.closest('.hero')) scramble(e.target);
+    if (!e.isIntersecting || e.target.closest('.hero')) return;
+    scramble(e.target);
+    io.unobserve(e.target);
   });
 }, { threshold: 0.6 });
 document.querySelectorAll('[data-scramble]').forEach((el) => io.observe(el));

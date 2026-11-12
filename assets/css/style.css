@@ -16,7 +16,7 @@
   --ember: #1847a8;
   --line: rgba(108, 194, 255, 0.22);
   --line-strong: rgba(108, 194, 255, 0.5);
-  --panel: rgba(4, 10, 24, 0.9);
+  --panel: rgba(4, 10, 24, 0.93);
   --rim: rgba(200, 220, 255, 0.36);
 
   /* titoli: geometrico e leggibile; testo: sans tecnico; dati e ID: monospazio */
@@ -371,10 +371,10 @@ main {
 .panel,
 .sheet {
   position: relative;
+  /* niente sfocatura dietro: sopra la scena 3D andrebbe ricalcolata a ogni fotogramma,
+     e con lo sfondo quasi opaco non si vede */
   background: var(--panel);
   border: 1px solid var(--line);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 /* angoli da mirino */
 .panel::before,
@@ -699,7 +699,8 @@ main {
   display: none;
 }
 .has-orbit .orbit { display: block; }
-.orbit__fx { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* alta quanto il viewport grande, come la scena: la barra degli indirizzi non la ridimensiona */
+.orbit__fx { position: absolute; inset: 0 0 auto; width: 100%; height: 100vh; height: 100lvh; }
 
 /* Chip in volo: ologramma con scanline e un leggero glitch */
 .orbit__chip {
@@ -804,17 +805,12 @@ main {
   .neonlink:hover .neonlink__arrow { transform: translate(2px, -2px); }
 }
 
-/* Touch: nessuna sfocatura dietro le schede. Sopra la scena 3D andrebbe ricalcolata
-   a ogni fotogramma, e con lo sfondo quasi opaco non si vede. */
+/* Touch: nessuna sfocatura nemmeno dietro le voci della barra in alto. */
 @media (hover: none), (max-width: 720px) {
-  .panel,
-  .sheet,
   .pill {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
-  .panel,
-  .sheet { background: rgba(4, 10, 24, 0.93); }
   .pill { background: rgba(2, 6, 16, 0.85); }
   .pill.is-current { background: rgba(10, 36, 84, 0.95); }
 }
